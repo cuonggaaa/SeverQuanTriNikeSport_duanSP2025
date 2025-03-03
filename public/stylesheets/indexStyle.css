@@ -1,0 +1,153 @@
+.logo {
+    max-width: 60px;
+    max-height: 60px;
+    margin: 7px 7px 7px 0px;
+    margin-right: 20px;
+}
+
+.colerHeader {
+    background-color: #38232860;
+}
+
+.boderBtn {
+    border-color: #1f68e5;
+    border-width: 1px;
+}
+
+.boderCard {
+    border-color: #1f68e5;
+    border-width: 2px;
+}
+
+/* Botton */
+.btnCustom {
+    transition-duration: 0.4s;
+    height: 38px;
+    border-radius: 8px;
+    border-color: #1f68e5;
+}
+
+.btnCustom:hover {
+    background-color: #1f68e5;
+    color: white;
+}
+
+.img-detail {
+    margin-top: 13px;
+    margin-right: 13px;
+    margin-bottom: 13px;
+    border-radius: 10px;
+    max-width: 500px;
+    max-height: 500px;
+}
+
+.comment {
+    height: 470px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.content {
+    background-color: #1f68e5;
+}
+
+footer {
+    background-color: #382328f1;
+    color: #e3e3e3;
+}
+
+.bottomMenu li a {
+    text-decoration: none;
+    color: #ffffffb1;
+}
+
+/* Table */
+.borderTable {
+    border-color: #1f68e5;
+}
+
+.bg-thead {
+    background-color: #1f68e560;
+}
+
+.bgform {
+    background-color: white;
+    border-radius: 13px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4);
+    width: 98%;
+    padding: 40px;
+}
+
+
+.checkbox-group {
+    font-size: 23px; /* Đặt kích thước font chung cho toàn bộ nhóm checkbox */
+}
+
+.checkbox-group .form-check-label {
+    margin-left: 5px; /* Tăng khoảng cách giữa checkbox và nhãn */
+}
+
+
+.btn-checkbox {
+    display: none; /* Ẩn nút gốc */
+}
+
+
+/* size */
+
+.checkbox-group {
+    width: 700px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.btn-checkbox {
+    display: none; /* Ẩn checkbox gốc */
+}
+
+.checkbox-label {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+    padding: 0.6rem 1rem; /* Tăng padding để nút to ra một chút */
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    margin: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease; /* Hiệu ứng chuyển động */
+}
+
+.btn-checkbox:checked + .checkbox-label {
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Hiệu ứng shadow khi checkbox được chọn */
+    transform: scale(1.3); /* Nút to ra khi checkbox được chọn */
+    font-weight: bold;
+    margin-inline: 15px;
+}
+
+.btn-checkbox:checked.black + .checkbox-label {
+    color: black; /* Màu chữ khi checkbox được chọn và màu nền đen */
+}
+
+/* thêm sản phẩm 
+ */
+
+
+ .preview-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.preview-image {
+    max-width: 120px;
+    max-height: 120px;
+    margin: 5px;
+    margin-bottom: 10px;
+}
+.discount {
+     /* Màu chữ là màu xanh lá cây, bạn có thể điều chỉnh màu sắc theo mong muốn */
+    font-size: 18px; /* Kích thước chữ */
+    font-weight: bold; /* Độ đậm của chữ */
+    text-decoration: line-through; /* Thêm đường gạch ngang */
+    /* Các thuộc tính CSS khác mà bạn muốn thêm vào */
+  }
