@@ -1,18 +1,19 @@
 const express = require('express');
 const crypto = require('crypto');
 const morgan = require('morgan');
-const faviconMiddleware = require('./middlewares/faviconMiddleware.js');
+const faviconMiddleware = require('./middlewares/faviconMiddleware');
 const cors = require('cors');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var path = require('path');
 
-const { connectMongoDB } = require('./config/db.js');
+const { connectMongoDB } = require('./config/db');
 
 const app = express();
 const port = 3000;
 connectMongoDB();
 
+const apiRouter = require('./routes/api.js');
 
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -40,6 +41,8 @@ app.use(
     saveUninitialized: true
   })
 );
+
+app.use('/api', apiRouter);
 
 app.listen(port, () => {
   console.log(`server runing port ${port} `);
