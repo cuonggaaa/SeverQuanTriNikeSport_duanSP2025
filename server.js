@@ -8,12 +8,23 @@ var cookieParser = require('cookie-parser');
 var path = require('path');
 
 const { connectMongoDB } = require('./config/db');
+// mdv
+const checklogin = require('./middlewares/checklogin.js');
 
 const app = express();
 const port = 3000;
 connectMongoDB();
 
-const apiRouter = require('./routes/api.js');
+const apiRouter = require('./routes/api');
+const mainRoute = require('./routes/main.js');
+const r = require('./routes/index.js');
+const product = require('./routes/product.js');
+const category = require('./routes/category.js');
+// const voucher = require('./routes/voucher');
+// const user = require('./routes/user.js');
+// const review = require('./routes/review.js');
+// const order = require('./routes/order_admin');
+
 
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -43,6 +54,17 @@ app.use(
 );
 
 app.use('/api', apiRouter);
+
+//admin
+app.use('/product', checklogin.requiresLogin, product);
+app.use('/category', checklogin.requiresLogin, category);
+// app.use('/voucher', checklogin.requiresLogin, voucher);
+// app.use('/user', checklogin.requiresLogin, user);
+// app.use('/review', checklogin.requiresLogin, review);
+// app.use('/order', checklogin.requiresLogin, order);
+app.use('/r', r);
+app.use('/', checklogin.requiresLogin, mainRoute);
+
 
 app.listen(port, () => {
   console.log(`server runing port ${port} `);
