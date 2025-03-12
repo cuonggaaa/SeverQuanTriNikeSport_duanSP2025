@@ -1,0 +1,63 @@
+<%- include('../inc/top') %>
+
+    <div class="container mt-4">
+        <h1 class="mb-4">Quản Lý Thể Loại</h1>
+
+        <% if(msg && msg.length> 0){ %>
+            <div class="alert <%= Array.isArray(data) && data.length > 0 ? 'alert-info' : 'alert-danger' %> alert-dismissible fade show"
+                role="alert">
+                <%= msg %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <% } %>
+
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Tên thể loại</th>
+                                        <th>Ảnh bìa</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (Array.isArray(data) && data.length> 0) { %>
+                                        <% data.forEach((item)=> { %>
+                                            <tr>
+                                                <td>
+                                                    <%= item.name || 'N/A' %>
+                                                </td>
+                                                <td>
+                                                    <% if (item.image) { %>
+                                                        <img src="<%= item.image %>" alt="Image"
+                                                            style="width: 100px; height: 100px; object-fit: cover;">
+                                                        <% } else { %>
+                                                            N/A
+                                                            <% } %>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <a href="/category/edit/<%= item._id %>"
+                                                            class="btn btn-outline-primary btn-sm">Sửa</a>
+                                                        <a href="/category/del/<%= item._id %>"
+                                                            class="btn btn-outline-danger btn-sm">Xóa</a>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="6" class="text-center">Không có dữ liệu</td>
+                                                    </tr>
+                                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+    </div>
+
+    <%- include('../inc/bottom') %>
