@@ -1,0 +1,100 @@
+<%- include('../inc/top') %>
+
+    <div class="container mt-4">
+        <h1 class="mb-4">Quản Lý Sản Phẩm</h1>
+
+        <% if(msg && msg.length> 0){ %>
+            <div class="alert <%= Array.isArray(data) && data.length > 0 ? 'alert-info' : 'alert-danger' %> alert-dismissible fade show"
+                role="alert">
+                <%= msg %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <% } %>
+
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Mô tả</th>
+                                        <th>Kích cỡ</th>
+                                        <th>Giá sản phẩm</th>
+                                        <!-- <th>Giảm giá</th> -->
+                                        <th>Ảnh sản phẩm</th>
+                                        <th>Thể loại</th>
+                                        <!-- <th>Số lượng</th> -->
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (Array.isArray(data) && data.length> 0) { %>
+                                        <% data.forEach((item)=> { %>
+                                            <tr>
+                                                <td>
+                                                    <a class="text-decoration-none text-dark"
+                                                        href="/product/detail/<%= item._id %>">
+                                                        <%= item.name || 'N/A' %>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <%= item.description || 'N/A' %>
+                                                </td>
+                                                <td>
+                                                    <%= item.size || 'không có kích cỡ' %>
+                                                </td>
+                                                <td>
+                                                    <%= item.price || 'N/A' %>
+                                                </td>
+                                                <!-- <td>
+                                                    <%= item.discount  %>
+                                                </td> -->
+                                                 <!-- <td>
+                                                    <%= item.startDate ? new Date(item.startDate).toLocaleDateString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit' }) : '' %>
+                                                </td>
+                                                <td>
+                                                    <%= item.endDate ? new Date(item.endDate).toLocaleDateString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit' }) : '' %>
+                                                </td> -->
+                                                
+                                                <td>
+                                                    <% if (item.image) { %>
+                                                        <img src="<%= item.image[0] %>" alt="Image"
+                                                            style="width: 100px; height: 100px; object-fit: cover;">
+                                                        <% } else { %>
+                                                            N/A
+                                                            <% } %>
+                                                </td>
+                                                <td>
+                                                    <%= item.categorysId ? item.categorysId.name
+                                                        : 'Thể loại đã bị xóa, hãy cật nhật' %>
+                                                </td>
+                                                <!-- <td>
+                                                    <%= item.quantity || 'N/A' %>
+                                                </td> -->
+
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <a href="/product/edit/<%= item._id %>"
+                                                            class="btn btn-outline-primary btn-sm">Sửa</a>
+                                                        <a href="/product/del/<%= item._id %>"
+                                                            class="btn btn-outline-danger btn-sm">Xóa</a>
+                                                        <a href="/product/detail/<%= item._id %>"
+                                                            class="btn btn-outline-info btn-sm">Chi tiết</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="6" class="text-center">Không có dữ liệu</td>
+                                                    </tr>
+                                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+    </div>
+
+    <%- include('../inc/bottom') %>
