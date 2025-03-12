@@ -1,0 +1,74 @@
+<%- include('../inc/top') %>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Thêm Thể Loại</h1>
+
+        <% if(msg.length> 0) { %>
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <%= msg %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <% } %>
+
+                <div class="card shadow">
+                    <div class="card-body">
+                        <form action="" method="post" class="needs-validation" enctype="multipart/form-data">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="name" class="form-label">Tên Thể loại</label>
+                                    <input id="name" class="form-control" type="text" name="name" value="">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="image" class="form-label">Ảnh bìa</label>
+                                    <input id="image" class="form-control" type="file" name="image" accept="image/*">
+                                    <div id="image-preview" style="margin-top: 10px;">
+                                        <img id="preview" src="" alt="Image Preview"
+                                            style="max-width: 10%; display: none;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 mt-4">
+                                <button class="btn btn-primary" type="submit">Thêm Thể loại</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const fileInput = document.getElementById('image');
+            const imagePreview = document.getElementById('preview');
+
+            // Handle paste event to detect and handle image pasting
+            document.addEventListener('paste', (event) => {
+                const items = event.clipboardData.items;
+                for (let item of items) {
+                    if (item.type.startsWith('image/')) {
+                        const blob = item.getAsFile();
+                        const url = URL.createObjectURL(blob);
+                        imagePreview.src = url;
+                        imagePreview.style.display = 'block';
+
+                        // Create a new File object and set it to the file input
+                        const newFile = new File([blob], 'pasted-image.png', { type: blob.type });
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(newFile);
+                        fileInput.files = dataTransfer.files;
+                    }
+                }
+            });
+
+            // Handle file input change to show preview
+            fileInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const url = URL.createObjectURL(file);
+                    imagePreview.src = url;
+                    imagePreview.style.display = 'block';
+                } else {
+                    imagePreview.style.display = 'none';
+                }
+            });
+        });
+    </script>
+    <%- include('../inc/bottom') %>
