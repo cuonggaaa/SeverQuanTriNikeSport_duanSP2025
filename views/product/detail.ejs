@@ -1,0 +1,53 @@
+<%- include('../inc/top3') %>
+    <H1>Chi Tiết Sản Phẩm</H1>
+
+    <% if (msg.length> 0) { %>
+        <p class="alert alert-info">
+            <%= msg %>
+        </p>
+        <% } %>
+
+            <% if (product) { %>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Tên sản phẩm: <%= product.name %>
+                        </h5>
+                        <p class="card-text">Mô tả: <%= product.description %>
+                        </p>
+                        <p class="card-text">Kích cỡ: <%= product.size || 'không có' %>
+                        </p>
+                        <p class="card-text">Giá sản phẩm: <%= product.price %>
+                        </p>
+                        <!-- <p class="card-text">Giảm giá: <%= product.discount %>
+                        </p> -->
+                        <!--<p class="card-text">Ngày bắt đầu: <%= product.startDate %>
+                        </p>
+                        <p class="card-text">Ngày kết thúc: <%= product.endDate %>
+                        </p>-->
+                        <p class="card-text">Ảnh sản phẩm </p>
+                        <td>
+                            <% if (product.image && product.image.length> 0) { %>
+                                <% product.image.forEach(function(image) { %>
+                                    <img src="<%= image %>" alt="Image"
+                                        style="width: 100px; height: 100px; object-fit: cover; margin: 5px;">
+                                    <% }); %>
+                                        <% } else { %>
+                                            Không có ảnh sản phẩm
+                                            <% } %>
+                        </td>
+
+                        <p class="card-text">Thể loại: <%= product.categorysId ? product.categorysId.name
+                                : 'Thể loại đã bị xóa, hãy cật nhật' %>
+
+                        </p>
+                        <!-- <p class="card-text">Số lượng: <%= product.quantity %>
+                        </p> -->
+                        <a href="/product/edit/<%= product._id %>" class="btn btn-primary">Chỉnh sửa</a>
+                        <a href="/product/del/<%= product._id %>" class="btn btn-danger">Xóa</a>
+                    </div>
+                </div>
+                <% } else { %>
+                    <p>Không có thông tin sản phẩm</p>
+                    <% } %>
+
+                        <%- include('../inc/bottom') %>
