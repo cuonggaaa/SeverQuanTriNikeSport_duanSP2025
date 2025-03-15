@@ -1,0 +1,89 @@
+<%- include('../inc/top') %>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Thêm người dùng mới</h1>
+
+        <% if(msg.length> 0) { %>
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <%= msg %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <% } %>
+
+                <div class="card shadow">
+                    <div class="card-body">
+                        <form action="" method="post" class="needs-validation">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="name" class="form-label">Tên người dùng</label>
+                                    <input id="name" class="form-control" type="text" name="name"
+                                        value="" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="address" class="form-label">Địa chỉ</label>
+                                    <input id="address" class="form-control" type="text" name="address" value=""
+                                        required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="phone" class="form-label">Số điện toại</label>
+                                    <input id="phone" class="form-control" type="text" name="phone" value=""
+                                        required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input id="email" class="form-control" type="text" name="email" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="password" class="form-label">Mật khẩu người dùng</label>
+                                    <input id="password" class="form-control" type="password" name="password" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="passwordcf" class="form-label">Nhập lại mật khẩu</label>
+                                    <input id="passwordcf" class="form-control" type="password" name="passwordcf" required>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2 mt-4">
+                                <button class="btn btn-primary" type="submit">Thêm người dùng</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const fileInput = document.getElementById('image_url');
+            const imagePreview = document.getElementById('preview');
+
+            // Handle paste event to detect and handle image pasting
+            document.addEventListener('paste', (event) => {
+                const items = event.clipboardData.items;
+                for (let item of items) {
+                    if (item.type.startsWith('image/')) {
+                        const blob = item.getAsFile();
+                        const url = URL.createObjectURL(blob);
+                        imagePreview.src = url;
+                        imagePreview.style.display = 'block';
+
+                        // Create a new File object and set it to the file input
+                        const newFile = new File([blob], 'pasted-image.png', { type: blob.type });
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(newFile);
+                        fileInput.files = dataTransfer.files;
+                    }
+                }
+            });
+
+            // Handle file input change to show preview
+            fileInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const url = URL.createObjectURL(file);
+                    imagePreview.src = url;
+                    imagePreview.style.display = 'block';
+                } else {
+                    imagePreview.style.display = 'none';
+                }
+            });
+        });
+    </script>
+    <%- include('../inc/bottom') %>
