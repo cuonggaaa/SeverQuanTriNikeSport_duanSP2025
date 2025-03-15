@@ -1,0 +1,80 @@
+<%- include('../inc/top3') %>
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Chỉnh Sửa môn học</h1>
+
+        <% if(msg.length> 0) { %>
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <%= msg %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <% } %>
+
+                <div class="card shadow">
+                    <div class="card-body">
+                        <form action="" method="post" class="needs-validation" novalidate>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="instructor" class="form-label">Tên giảng viên</label>
+                                    <input id="instructor" class="form-control" type="text" name="instructor"
+                                        value="<%= mclass ? mclass.instructor : '' %>" required>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="day" class="form-label">Ngày học</label>
+                                    <input id="day" class="form-control" type="text" name="day"
+                                        value="<%= mclass ? mclass.day : '' %>" required>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="time" class="form-label">Thời gian học</label>
+                                    <input id="time" class="form-control" type="text" name="time"
+                                        value="<%= mclass ? mclass.time : '' %>" required>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="status" class="form-label">Trạng thái</label>
+                                    <select id="status" class="form-control" name="status" required>
+                                        <option value="ACTIVE" <%=mclass && mclass.status==='ACTIVE' ? 'selected' : ''
+                                            %>>ACTIVE</option>
+                                        <option value="INACTIVE" <%=mclass && mclass.status==='INACTIVE' ? 'selected'
+                                            : '' %>>INACTIVE</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="class_code" class="form-label">Mã môn</label>
+                                    <input id="class_code" class="form-control" type="text" name="class_code"
+                                        value="<%= mclass ? mclass.class_code : '' %>" required>
+                                </div>
+
+
+
+                                <% if (type.length> 0) { %>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Gán khóa học</label>
+                                        <select class="form-select" name="course_id"
+                                            aria-label="Default select example">
+                                            <% type.forEach(course=> { %>
+                                                <option value="<%= course._id %>" <%=(mclass && mclass.course_id &&
+                                                    mclass.course_id.toString()===course._id.toString()) ? 'selected'
+                                                    : '' %>
+                                                    >
+                                                    <%= course.course_name %>
+                                                </option>
+                                                <% }) %>
+                                        </select>
+                                    </div>
+                                    <% } %>
+
+                            </div>
+
+                            <div class="d-grid gap-2 mt-4">
+                                <button class="btn btn-primary" type="submit">Cập Nhật Thông Tin</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+    </div>
+    <%- include('../inc/bottom') %>
