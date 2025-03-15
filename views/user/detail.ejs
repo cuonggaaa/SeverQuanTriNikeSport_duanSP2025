@@ -1,0 +1,248 @@
+<%- include('../inc/top3') %>
+
+    <div class="container my-5">
+        <h1 class="mb-4 text-center">Chi Tiết Học Sinh</h1>
+
+        <% if (msg && msg.length> 0) { %>
+            <div class="alert alert-info">
+                <%= msg %>
+            </div>
+            <% } %>
+
+                <% if (data) { %>
+                    <div class="row">
+                        <!-- Thông tin cá nhân -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="card-title mb-0">Thông tin học sinh</h5>
+                                </div>
+                                <div class="card-body">
+                                    <% if (data.user) { %>
+                                        <p class="card-text"><strong>Tên đầy đủ:</strong>
+                                            <%= data.user.full_name || 'đã bị xóa hoặc chưa có thông tin' %>
+                                        </p>
+                                        <p>
+                                            <% if ( data.user.image !=null & data.user.image !='' ) {%>
+                                                <strong>Ảnh:</strong>
+                                                <img src="<%= data.user.image %>" class="card-img-top">
+                                                <% }else{%>
+
+                                                    <% } %>
+                                        </p>
+                                        <p class="card-text"><strong>Ngày sinh:</strong>
+                                            <%= data.user.date_of_birth ? new
+                                                Date(data.user.date_of_birth).toLocaleDateString('vi-VN', {
+                                                year: 'numeric' , month: 'long' , day: 'numeric' })
+                                                : 'đã bị xóa hoặc chưa có thông tin' %>
+                                        </p>
+                                        <p class="card-text"><strong>Địa chỉ:</strong>
+                                            <%= data.user.address || 'đã bị xóa hoặc chưa có thông tin' %>
+                                        </p>
+                                        <p class="card-text"><strong>Số điện thoại:</strong>
+                                            <%= data.user.phone_number || 'đã bị xóa hoặc chưa có thông tin' %>
+                                        </p>
+                                        <p class="card-text"><strong>Email:</strong>
+                                            <%= data.user.email || 'đã bị xóa hoặc chưa có thông tin' %>
+                                        </p>
+
+                                        <p class="card-text"><strong>Ngày tạo tài khoản:</strong>
+                                            <%= data.user.created_at ? new
+                                                Date(data.user.created_at).toLocaleDateString('vi-VN', { year: 'numeric'
+                                                , month: 'long' , day: 'numeric' }) : 'đã bị xóa hoặc chưa có thông tin'
+                                                %>
+                                        </p>
+                                        <% } else { %>
+                                            <p class="card-text text-muted">Không có thông tin học sinh</p>
+                                            <% } %>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Học bổng -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="card-title mb-0">Học bổng</h5>
+                                </div>
+                                <div class="card-body">
+                                    <% if (data.scholarship && data.scholarship.length> 0) { %>
+                                        <% data.scholarship.forEach((scholarship, index)=> { %>
+                                            <div class="mb-3 <%= index > 0 ? 'border-top pt-3' : '' %>">
+                                                <p class="card-text"><strong>Ngày:</strong>
+                                                    <%= scholarship.created_at ? new
+                                                        Date(scholarship.created_at).toLocaleDateString('vi-VN', {
+                                                        year: 'numeric' , month: 'long' , day: 'numeric' })
+                                                        : 'đã bị xóa hoặc chưa có thông tin' %>
+                                                </p>
+                                                <p class="card-text"><strong>Học bổng:</strong>
+                                                    <%= scholarship.scholarship_name
+                                                        || 'đã bị xóa hoặc chưa có thông tin' %>
+                                                </p>
+                                                <p class="card-text"><strong>Tiền thưởng:</strong>
+                                                    <%= scholarship.amount_in_words
+                                                        || 'đã bị xóa hoặc chưa có thông tin' %>
+                                                </p>
+                                                <p class="card-text"><strong>Thành tích:</strong>
+                                                    <%= scholarship.eligibility_criteria
+                                                        || 'đã bị xóa hoặc chưa có thông tin' %>
+                                                </p>
+                                            </div>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <p class="card-text text-muted">Không có thông tin học bổng</p>
+                                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- môn học -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="card-title mb-0">môn học</h5>
+                                </div>
+                                <div class="card-body">
+                                    <% if (data.classs && data.classs.length> 0) { %>
+                                        <% data.classs.forEach((classData, index)=> { %>
+                                            <div class="mb-3 <%= index > 0 ? 'border-top pt-3' : '' %>">
+                                                <p class="card-text"><strong>Giảng viên:</strong>
+                                                    <%= classData.instructor || 'đã bị xóa hoặc chưa có thông tin' %>
+                                                </p>
+                                                <p class="card-text"><strong>Ngày học:</strong>
+                                                    <%= classData.day || 'đã bị xóa hoặc chưa có thông tin' %>
+                                                </p>
+                                                <p class="card-text"><strong>Giờ học:</strong>
+                                                    <%= classData.time || 'đã bị xóa hoặc chưa có thông tin' %>
+                                                </p>
+                                                <p class="card-text"><strong>Trạng thái:</strong>
+                                                    <span
+                                                        class="badge <%= classData.status === 'ACTIVE' ? 'bg-success' : 'bg-secondary' %>">
+                                                        <%= classData.status==='ACTIVE' ? 'Hoạt động'
+                                                            : 'Không hoạt động' %>
+                                                    </span>
+                                                </p>
+                                                <p class="card-text"><strong>Mã môn học:</strong>
+                                                    <%= classData.class_code || 'đã bị xóa hoặc chưa có thông tin' %>
+                                                </p>
+                                                <p class="card-text"><strong>Số lượng học sinh:</strong>
+                                                    <%= classData.user_id ? classData.user_id.length : 0 %>
+                                                </p>
+                                                <p class="card-text"><strong>khóa học:</strong>
+                                                    <%= classData.course_id && classData.course_id.course_name ?
+                                                        classData.course_id.course_name
+                                                        : 'đã bị xóa hoặc chưa có tên môn' %>
+                                                </p>
+                                            </div>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <p class="card-text text-muted">Không có thông tin môn học</p>
+                                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bảng điểm -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-header bg-warning text-dark">
+                                    <h5 class="card-title mb-0">Bảng điểm</h5>
+                                </div>
+                                <div class="card-body">
+                                    <% if (data.grades && data.grades.length> 0) { %>
+                                        <% data.grades.forEach((grade, index)=> { %>
+                                            <div class="mb-3 <%= index > 0 ? 'border-top pt-3' : '' %>">
+                                                <p class="card-text"><strong>Ngày:</strong>
+                                                    <%= grade.created_at ? new
+                                                        Date(grade.created_at).toLocaleDateString('vi-VN', {
+                                                        year: 'numeric' , month: 'long' , day: 'numeric' })
+                                                        : 'đã bị xóa hoặc chưa có thông tin' %>
+                                                </p>
+                                                <p class="card-text"><strong>khóa học:</strong>
+                                                    <%= grade.course_id && grade.course_id.course_name ?
+                                                        grade.course_id.course_name : 'đã bị xóa hoặc chưa có tên môn'
+                                                        %>
+                                                </p>
+                                                <p class="card-text"><strong>Mã môn học:</strong>
+                                                    <%= grade.class_id && grade.class_id.class_code ?
+                                                        grade.class_id.class_code : 'đã bị xóa hoặc chưa có mã môn' %>
+                                                </p>
+                                                <p class="card-text"><strong>Điểm số:</strong> <span
+                                                        class="badge bg-primary">
+                                                        <%= grade.grade || 'đã bị xóa hoặc chưa có điểm' %>
+                                                    </span></p>
+                                            </div>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <p class="card-text text-muted">Không có thông tin bảng điểm</p>
+                                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hóa đơn -->
+                        <div class="col-md-12 mb-4">
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-danger text-white">
+                                    <h5 class="card-title mb-0">Hóa đơn</h5>
+                                </div>
+                                <div class="card-body">
+                                    <% if (data.tuition && data.tuition.length> 0) { %>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Ngày thanh toán</th>
+                                                        <th>Số tiền</th>
+                                                        <th>Hạn thanh toán</th>
+                                                        <th>Trạng thái</th>
+                                                        <th>Mã môn học</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% data.tuition.forEach(tuition=> { %>
+                                                        <tr>
+                                                            <td>
+                                                                <%= tuition.created_at ? new
+                                                                    Date(tuition.created_at).toLocaleDateString('vi-VN',
+                                                                    { year: 'numeric' , month: 'long' , day: 'numeric'
+                                                                    }) : 'đã bị xóa hoặc chưa có thông tin' %>
+                                                            </td>
+                                                            <td>
+                                                                <%= tuition.payment_amount
+                                                                    || 'đã bị xóa hoặc chưa có thông tin' %>
+                                                            </td>
+                                                            <td>
+                                                                <%= tuition.due_date ? new
+                                                                    Date(tuition.due_date).toLocaleDateString('vi-VN', {
+                                                                    year: 'numeric' , month: 'long' , day: 'numeric' })
+                                                                    : 'đã bị xóa hoặc chưa có thông tin' %>
+                                                            </td>
+                                                            <td><span
+                                                                    class="badge <%= tuition.status === 'PAID' ? 'bg-success' : 'bg-warning text-dark' %>">
+                                                                    <%= tuition.status
+                                                                        || 'đã bị xóa hoặc chưa có trạng thái' %>
+                                                                </span></td>
+                                                            <td>
+                                                                <%= tuition.class_id && tuition.class_id.class_code ?
+                                                                    tuition.class_id.class_code
+                                                                    : 'đã bị xóa hoặc chưa có mã môn' %>
+                                                            </td>
+                                                        </tr>
+                                                        <% }); %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <% } else { %>
+                                            <p class="card-text text-muted">Không có thông tin hóa đơn</p>
+                                            <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% } else { %>
+                        <div class="alert alert-warning">Không có thông tin học sinh</div>
+                        <% } %>
+    </div>
+
+    <%- include('../inc/bottom') %>
