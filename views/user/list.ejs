@@ -1,0 +1,95 @@
+<%- include('../inc/top') %>
+
+    <div class="container mt-4">
+        <h1 class="mb-4">Quản Lý người dùng</h1>
+
+        <form action="" method="post" class="needs-validation ">
+            <div class="row g-3">
+                <div class="col-md-6 d-grid mb-4">
+                    <label for="name" class="form-label">Tên người dùng</label>
+                    <input id="name" class="form-control" type="text" name="name">
+                </div>
+                <div class="col-md-6 d-grid mb-4">
+                    <button class="btn btn-primary d-grid mt-4" type="submit">tìm kiếm</button>
+                </div>
+            </div>
+
+        </form>
+        <% if(msg && msg.length> 0){ %>
+            <div class="alert <%= Array.isArray(data) && data.length > 0 ? 'alert-info' : 'alert-danger' %> alert-dismissible fade show"
+                role="alert">
+                <%= msg %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <% } %>
+
+
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Tên</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Số điện  thoại</th>
+                                        <th>Email</th>
+                                        <th>Ngày tạo tài khoản</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (Array.isArray(data) && data.length> 0) { %>
+                                        <% data.forEach((item)=> { %>
+                                            <tr>
+
+                                                <td>
+                                                    <a class="text-decoration-none text-dark"
+                                                        href="/user/detail/<%= item._id %>">
+                                                        <%= item.name || 'không có tên' %>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <%= item.address || 'không có địa chỉ' %>
+                                                </td>
+                                                <td>
+                                                    <%= item.phone || 'không có trạng thái' %>
+                                                </td>
+                                                <td>
+                                                    <%= item.email || 'không có mã môn' %>
+                                                </td>
+                                                <td>
+                                                    <% const formatDate=(date)=> {
+                                                        return new Date(date).toLocaleDateString('en-GB', {
+                                                        day: '2-digit',
+                                                        month: '2-digit',
+                                                        year: 'numeric'
+                                                        });
+                                                        }; %>
+
+
+                                                        <%= item.createdAt ? formatDate(item.createdAt)
+                                                            : 'NaN' %>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+
+                                                        <a href="/user/del/<%= item._id %>"
+                                                            class="btn btn-outline-danger btn-sm">Xóa</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="6" class="text-center">Không có dữ liệu</td>
+                                                    </tr>
+                                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+    </div>
+
+    <%- include('../inc/bottom') %>
