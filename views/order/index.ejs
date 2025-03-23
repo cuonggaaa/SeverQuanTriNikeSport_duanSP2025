@@ -1,0 +1,418 @@
+<%- include('../inc/top') %>
+  <style>
+    .form-row {
+      display: flex;
+      padding: 10px;
+
+    }
+
+    .form-row .col-md-2 {
+      flex: 1;
+      padding: 0 10px;
+    }
+
+    .btn-toggle {
+      transition: all 0.3s ease;
+      border: none;
+      padding: 5px 10px;
+      /* Giảm giá trị padding */
+      font-weight: bold;
+      font-size: 1em;
+      /* Giảm kích thước font */
+    }
+
+    .btn-toggle.paid {
+      background: #92ff94;
+      color: black;
+    }
+
+    .btn-toggle.unpaid {
+      background: rgb(255, 140, 142);
+      color: black;
+    }
+
+    .container {
+      width: 100%;
+      /* Giảm kích thước container */
+      margin: auto;
+      /* Căn giữa container */
+    }
+
+    .fa {
+      margin-right: 5px;
+      /* Thêm khoảng cách giữa icon và văn bản */
+    }
+
+    nav {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 90%;
+      /* Điều chỉnh độ rộng của nav tùy theo nhu cầu của bạn */
+    }
+  </style>
+
+
+
+  <% if(msg.length> 0){ %>
+    <p class="alert alert-info">
+      <%= msg %>
+    </p>
+    <% } %>
+
+      <% if(msg2.length> 0){ %>
+        <p class="alert alert-danger">
+          <%= msg2 %>
+        </p>
+        <% } %>
+
+
+
+          <div class="form-row">
+            <div class="col-md-2 d-flex justify-content-center align-items-center">
+              <span class="btn btn-danger btn-lg" style="padding: 20px 20px; ">Số lượng sản hóa đơn: <%= tong_so_hoa_don
+                  %></span>
+            </div>
+            <div class="col-md-2 d-flex justify-content-center align-items-center">
+              <span class="btn btn-secondary btn-lg" style="padding: 20px 20px; ">Tỉ lệ thanh toán <%= ti_le_thanh_toan
+                  %> %
+              </span>
+            </div>
+            <div class="col-md-2 d-flex justify-content-center align-items-center">
+              <span class="btn btn-primary btn-lg" style="padding: 20px 20px; ">Tổng tiền: <%=
+                  tong_tien.toLocaleString('vi-VN') %> VNĐ</span>
+            </div>
+            <div class="col-md-2 d-flex justify-content-center align-items-center">
+              <span class="btn btn-success btn-lg" style="padding: 20px 20px; ">Đã thanh toán: <%=
+                  tong_tien_da_thanh_toan.toLocaleString('vi-VN') %> VNĐ
+              </span>
+            </div>
+          </div>
+
+
+
+
+          <!-- Biểu mẫu tìm kiếm -->
+          <form class="mb-3" action="" method="get" enctype="multipart/form-data">
+            <div class="form-row">
+              <div class="col-md-2">
+                <label for="from-date">Từ ngày</label>
+                <input type="date" id="from-date" name="from-date" class="form-control"
+                  value="<%= query['from-date'] %>">
+              </div>
+              <div class="col-md-2">
+                <label for="status">Chọn ngày</label>
+
+                <select id="date-select" onchange="setDate(this.value)" class="form-control">
+                  <option value="">none...</option>
+                  <option value="0">Hôm nay</option>
+                  <option value="1">1 ngày trước</option>
+                  <option value="7">7 ngày trước</option>
+                  <option value="30">30 ngày trước</option>
+                  <option value="90">90 ngày trước</option>
+                </select>
+              </div>
+
+              <div class="col-md-2">
+                <label for="to-date">Đến ngày</label>
+                <input type="date" id="to-date" name="to-date" class="form-control" value="<%= query['to-date'] %>">
+              </div>
+              <div class="col-md-2">
+                <label for="order-id">Mã đơn hàng</label>
+                <input placeholder="ID đơn hàng" type="text" id="id_" name="id_" class="form-control"
+                  value="<%= query.id_ %>">
+              </div>
+              <div class="col-md-2">
+                <label for="order-id">Mã người dùng</label>
+                <input placeholder="ID người dùng" type="text" id="user-id" name="user-id" class="form-control"
+                  value="<%= query['user-id'] %>">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-2">
+                <label for="min-price">Giá tối thiểu</label>
+                <input type="number" id="min-price" name="min-price" class="form-control"
+                  value="<%= query['min-price'] %>">
+              </div>
+              <div class="col-md-2">
+                <label for="max-price">Giá tối đa</label>
+                <input type="number" id="max-price" name="max-price" class="form-control"
+                  value="<%= query['max-price'] %>">
+              </div>
+              <div class="col-md-2">
+                <label for="status">Trạng thái thanh toán</label>
+                <select id="status" name="status" class="form-control">
+                  <option value="" <%=query.status=='' ? 'selected' : '' %>>Trạng thái</option>
+                  <option value="Pending" <%=query.status=='Pending' ? 'selected' : '' %>>Chờ xử lý</option>
+                  <option value="Processing" <%=query.status=='Processing' ? 'selected' : '' %>>Đang xử lý</option>
+                  <option value="Shipped" <%=query.status=='Shipped' ? 'selected' : '' %>>Đã gửi</option>
+                  <option value="Cancelled" <%=query.status=='Cancelled' ? 'selected' : '' %>>Đã hủy</option>
+                  <option value="Returned" <%=query.status=='Returned' ? 'selected' : '' %>>Đã trả lại</option>
+                  <option value="Delivered" <%=query.status=='Delivered' ? 'selected' : '' %>>Đã giao hàng</option>
+                </select>
+              </div>
+              <!-- status đã thanh toán == 3 5 6 7 8 -->
+
+
+              <div class="col-md-2 d-flex align-items-end justify-content-center">
+                <button type="submit" class="btn btn-success">Tìm kiếm</button>
+
+              </div>
+              <div class="col-md-1 d-flex align-items-end">
+
+                <a href="../order?from-date=&to-date=&id_=&user-id=&min-price=&max-price=&status=&payments="
+                  class="btn btn-primary" role="button" aria-pressed="true">Reset</a>
+              </div>
+            </div>
+          </form>
+
+
+
+          <!-- Bảng dữ liệu -->
+          <table class="table table-hover table-success ">
+            <thead>
+              <tr>
+                <th>Mã đơn</th>
+                <th>Danh mục</th>
+                <th>Payments</th>
+                <th>Đơn hàng</th>
+                <th>Người dùng</th>
+                <th>Trạng thái</th>
+                <th>Tổng tiền</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% bills.forEach(function(bill) { %>
+
+                <tr>
+                  <!-- mã đơn -->
+                  <td>
+                    <i class="far fa-calendar-alt"></i>
+                    <span style="color: rgb(0, 0, 0); font-weight: bold;">
+                      <%= typeof bill._id !=='undefined' && bill._id ? bill._id : 'Chưa có' %>
+
+                    </span>
+                  </td>
+                  <!-- Danh mục -->
+                  <td>
+
+                    <% if (bill.cartData) { %>
+
+                    Danh mục:
+                    <span style="color: rgb(0, 0, 0); font-weight: bold;">
+                      <%= bill.cartData.length %>
+                    </span><br>
+
+                    <span style="color: rgb(1, 46, 106); font-weight: bold;">
+
+                      <% bill.cartData.forEach(function(cart) { %>
+                        <% if (cart._id) { %>
+                          <%= cart.productId.name %>
+
+                            <% } else { %>
+                              <span style="color: red; font-weight: bold;">
+                                Danh mục không tồn tại
+                              </span>
+                              <% } %>
+                                <br>
+                                <% }); %>
+                    </span>
+                    <br>
+
+                    <% } else { %>
+                      <span style="color: rgb(255, 0, 0); font-weight: bold;">
+                        Danh mục không tồn tại
+                      </span>
+                      <% } %>
+
+                  </td>
+                  <!-- hình thức thanh toán -->
+                  <td>
+                    <% if (bill.paymentMethodId) { %>
+
+                    <% if (bill.paymentMethodId.code=='COD' ) { %>
+                      <span
+                        style="display: inline-block; padding: 5px 20px; color: black; background-color: #46ff55; font-weight: bold; border-radius: 10px;">
+                        COD
+                      </span>
+                      <% } else if (bill.paymentMethodId.code=='VNPAY' ) { %>
+                        <span
+                          style="display: inline-block; padding: 5px 20px; color: black; background-color: #ffdc74; font-weight: bold; border-radius: 10px;">
+                          VNPAY
+                        </span>
+                        <% } %>
+
+                        <% } else { %>
+                          <span style="color: rgb(255, 0, 0); font-weight: bold;">
+                            Phương thức thanh toán đã sảy ra lỗi
+                          </span>
+                          <% } %>
+                  </td>
+                  <!-- ngày đơn hàng -->
+                  <td>
+                    <% if (bill) { %>
+                    <i class="far fa-calendar-plus"></i>
+                    <span style="color: rgb(0, 0, 0); font-weight: bold;">
+                      <% var date=new Date(bill.createdAt); %>
+                        <%= date.toLocaleTimeString('vi-VN', { hour: '2-digit' , minute: '2-digit' }) %> -
+                          <%= date.toLocaleDateString('vi-VN', { day: '2-digit' , month: '2-digit' , year: 'numeric' })
+                            %>
+
+                    </span>
+                    <% } else { %>
+                      <span style="color: rgb(255, 0, 0); font-weight: bold;">
+                        Đơn đơn hàng lỗi
+                      </span>
+                      <% } %>
+                  </td>
+
+                  <!-- người dùng -->
+                  <td>
+                    <% if (bill.userId) { %>
+                    <i class="fas fa-address-card"></i>
+                    Tên đầy đủ :
+                    <span style="color: rgb(2, 120, 120); font-weight: bold;">
+                        <%= bill.userId.name ? bill.userId.name : (bill.userId.name? bill.userId.name : 'tên chưa có' ) %>
+                    </span>
+                    <br>
+                    Địa chỉ đặt hàng:
+                    <span style="color: rgb(0, 0, 0); font-weight: bold;">
+                      <%= bill.address ? bill.address : (bill.userId ? bill.userId.address : 'Địa chỉ chưa có' ) %>,
+                    </span>
+                    <br>
+
+                    Vai trò :
+                    <% if (bill.userId.is_admin===true ) { %>
+                      <span style="color: red; font-weight: bold;">
+                        ADMIN
+                      </span>
+                      <% } else if (bill.userId.is_admin===false ) { %>
+                        <span style="color: green; font-weight: bold;">
+                          USER
+                        </span>
+                        <% } %>
+                          <br>
+                          ID:
+                          <span style="color: purple; font-weight: bold;">
+                            <%= bill?.userId?._id %>
+                          </span>
+
+
+                          <% } else { %>
+                            <span style="color: rgb(255, 0, 0); font-weight: bold;">
+                              Người dùng không không tồn tại
+                            </span>
+                            <% } %>
+
+                  </td>
+                  <!-- trạng thái -->
+                  <td>
+                    <div class="container"
+                      style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                      <form action="" method="post" enctype="multipart/form-data" style="width: 100%;">
+                        <input type="hidden" name="billId" value="<%= bill._id %>">
+                        <input type="hidden" name="tokenUser" value="<%= bill.userId ? bill.userId.token : '' %>">
+
+
+                        <label for="status" style="font-weight: bold; margin-bottom: 10px;">Trạng thái thanh
+                          toán</label>
+                        <select id="status" name="status" class="form-control" style="margin-bottom: 20px;">
+
+                          <option value="Pending" <%=bill.status=='Pending' ? 'selected' : '' %>>Chờ xử lý</option>
+                          <option value="Processing" <%=bill.status=='Processing' ? 'selected' : '' %>>Đang xử lý
+                          </option>
+                          <option value="Shipped" <%=bill.status=='Shipped' ? 'selected' : '' %>>Đã gửi</option>
+                          <option value="Cancelled" <%=bill.status=='Cancelled' ? 'selected' : '' %>>Đã hủy</option>
+                          <option value="Returned" <%=bill.status=='Returned' ? 'selected' : '' %>>Đã trả lại</option>
+                          <option value="Delivered" <%=bill.status=='Delivered' ? 'selected' : '' %>>Đã giao hàng
+                          </option>
+
+                        </select>
+                        <button class="btn btn-secondary" type="submit" style="width: 100%;">Update</button>
+                      </form>
+                    </div>
+                  </td>
+                  <!-- giá tiền  -->
+
+
+                  <td>
+                    <span style="color: rgb(0, 0, 0); font-weight: bold;">
+                      <%= bill?.totalAmount?.toLocaleString('vi-VN') %> VNĐ
+                    </span>
+                  </td>
+                  <!-- deital  -->
+
+                  <!-- <td>
+                    <a href="/order/detail/<%= bill._id %>" class="btn btn-success btn-md" style="padding: 10px 20px; ">
+                      Details</a>
+                  </td> -->
+                </tr>
+
+                <% }); %>
+            </tbody>
+            <nav aria-label="Page navigation">
+              <ul class="pagination">
+                <% if (currentPage> 1) { %>
+                  <li class="page-item">
+                    <a class="page-link"
+                      href="?from-date=<%= query['from-date'] %>&to-date=<%= query['to-date'] %>&id_=<%= query.id_ %>&user-id=<%= query['user-id'] %>&min-price=<%= query['min-price'] %>&max-price=<%= query['max-price'] %>&status=<%= query.status %>&payments=<%= query.payments %>&page=1"
+                      aria-label="Previous">
+                      <span aria-hidden="true">««</span>
+                    </a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link"
+                      href="?from-date=<%= query['from-date'] %>&to-date=<%= query['to-date'] %>&id_=<%= query.id_ %>&user-id=<%= query['user-id'] %>&min-price=<%= query['min-price'] %>&max-price=<%= query['max-price'] %>&status=<%= query.status %>&payments=<%= query.payments %>&page=<%= currentPage - 1 %>">
+                      <span aria-hidden="true">«</span>
+                    </a>
+                  </li>
+                  <% } %>
+                    <% for (let i=1; i <=totalPages; i++) { %>
+                      <li class="page-item <%= currentPage == i ? 'active' : '' %>">
+                        <a class="page-link"
+                          href="?from-date=<%= query['from-date'] %>&to-date=<%= query['to-date'] %>&id_=<%= query.id_ %>&user-id=<%= query['user-id'] %>&min-price=<%= query['min-price'] %>&max-price=<%= query['max-price'] %>&status=<%= query.status %>&payments=<%= query.payments %>&page=<%= i %>">
+                          <%= i %>
+                        </a>
+                      </li>
+                      <% } %>
+                        <% if (currentPage < totalPages) { %>
+                          <li class="page-item">
+                            <a class="page-link"
+                              href="?from-date=<%= query['from-date'] %>&to-date=<%= query['to-date'] %>&id_=<%= query.id_ %>&user-id=<%= query['user-id'] %>&min-price=<%= query['min-price'] %>&max-price=<%= query['max-price'] %>&status=<%= query.status %>&payments=<%= query.payments %>&page=<%= currentPage + 1 %>">
+                              <span aria-hidden="true">»</span>
+                            </a>
+                          </li>
+                          <li class="page-item">
+                            <a class="page-link"
+                              href="?from-date=<%= query['from-date'] %>&to-date=<%= query['to-date'] %>&id_=<%= query.id_ %>&user-id=<%= query['user-id'] %>&min-price=<%= query['min-price'] %>&max-price=<%= query['max-price'] %>&status=<%= query.status %>&payments=<%= query.payments %>&page=<%= totalPages %>"
+                              aria-label="Next">
+                              <span aria-hidden="true">»»</span>
+                            </a>
+                          </li>
+                          <% } %>
+              </ul>
+            </nav>
+
+
+          </table>
+          <script>
+            $('button[type="reset"]').click(function () {
+              // Đặt lại giá trị của các trường input và select
+              $('input[type="text"], input[type="number"], input[type="date"], select').val('');
+            });
+
+            function setDate(days) {
+              var date = new Date();
+              date.setDate(date.getDate() - days);
+              document.getElementById('from-date').value = date.toISOString().split('T')[0];
+
+              var today = new Date();
+              document.getElementById('to-date').value = today.toISOString().split('T')[0];
+            }
+
+
+          </script>
+
+
+
+          <%- include('../inc/bottom') %>
