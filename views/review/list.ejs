@@ -28,7 +28,7 @@
                                         <% data.forEach((item)=> { %>
                                             <tr>
                                                 <td>
-                                                    <%= item.userId.name || 'N/A' %>
+                                                    <%= item.userId ? item.userId.name : 'N/A' %>
                                                 </td>
                                                 <td>
                                                     <%= item.productId ? item.productId.name : 'N/A' %>
