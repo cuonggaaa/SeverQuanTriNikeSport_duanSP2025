@@ -22,7 +22,7 @@ const product = require('./routes/product.js');
 const category = require('./routes/category.js');
 const voucher = require('./routes/voucher.js');
 const user = require('./routes/user.js');
-// const review = require('./routes/review.js');
+const review = require('./routes/review.js');
 const order = require('./routes/order_admin.js');
 
 
@@ -60,7 +60,7 @@ app.use('/product', checklogin.requiresLogin, product);
 app.use('/category', checklogin.requiresLogin, category);
 app.use('/voucher', checklogin.requiresLogin, voucher);
 app.use('/user', checklogin.requiresLogin, user);
-// app.use('/review', checklogin.requiresLogin, review);
+app.use('/review', checklogin.requiresLogin, review);
 app.use('/order', checklogin.requiresLogin, order);
 app.use('/r', r);
 app.use('/', checklogin.requiresLogin, mainRoute);
