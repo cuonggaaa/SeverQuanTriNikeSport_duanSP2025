@@ -1,8 +1,8 @@
 const mProduct = require('../models/product.model');
-// const mProductR = require('../models/productReview.model');
-// const mProductF = require('../models/productFavorites.model');
+const mProductR = require('../models/productReview.model');
+const mProductF = require('../models/productFavorites.model');
 const mCategory = require('../models/category.model');
-// const mCart = require('../models/cart.model');
+const mCart = require('../models/cart.model');
 const mongoose = require('mongoose');
 const { responseHandler } = require('../utils/responseHandler');
 
