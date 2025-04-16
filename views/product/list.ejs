@@ -39,11 +39,35 @@
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <%= item.description || 'N/A' %>
+                                                    <% 
+                                                        const words = item.description ? item.description.split(' ') : [];
+                                                        const shortDesc = words.slice(0, 10).join(' ');
+                                                        const hasMore = words.length > 10;
+                                                    %>
+                                                
+                                                    <span>
+                                                        <%= shortDesc %>
+                                                        <% if (hasMore) { %>
+                                                            <span class="text-primary" style="cursor: pointer;" onclick="toggleDescription(this)">
+                                                                ... Xem thêm
+                                                            </span>
+                                                            <span class="full-description d-none"><%= item.description %></span>
+                                                        <% } %>
+                                                    </span>
                                                 </td>
+                                                
                                                 <td>
-                                                    <%= item.size || 'không có kích cỡ' %>
+                                                    <% if (item.sizes && item.sizes.length > 0) { %>
+                                                        <ul>
+                                                            <% item.sizes.forEach(s => { %>
+                                                                <li><%= s.size %> - <%= s.quantity %> số lượng</li>
+                                                            <% }) %>
+                                                        </ul>
+                                                    <% } else { %>
+                                                        <%= 'Không có kích cỡ' %>
+                                                    <% } %>
                                                 </td>
+                                                
                                                 <td>
                                                     <%= item.price || 'N/A' %>
                                                 </td>
@@ -96,5 +120,20 @@
                     </div>
                 </div>
     </div>
+
+    <script>
+        function toggleDescription(element) {
+            const fullDesc = element.nextElementSibling;
+            if (fullDesc.classList.contains('d-none')) {
+                element.previousSibling.textContent += ' ';
+                element.textContent = ' Ẩn bớt';
+                fullDesc.classList.remove('d-none');
+            } else {
+                element.textContent = '... Xem thêm';
+                fullDesc.classList.add('d-none');
+            }
+        }
+    </script>
+    
 
     <%- include('../inc/bottom') %>

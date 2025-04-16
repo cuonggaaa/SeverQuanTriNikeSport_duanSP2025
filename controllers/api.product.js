@@ -44,8 +44,8 @@ const getAll = async (req, res, next) => {
         .find(searchQuery)
         .populate('categorysId')
         .sort(sortOptions),
-        // .skip(skip)
-        // .limit(limit),
+      // .skip(skip)
+      // .limit(limit),
       mProduct.countDocuments()
     ]);
 
@@ -170,11 +170,10 @@ const add = async (req, res, next) => {
   if (req.files && req.files.length > 0) {
     images = req.files.map((file) => file.path); // Lấy đường dẫn ảnh từ các tệp.
   }
-  console.log('🚀 ~ add ~ images:', images);
   const {
     categorysId,
     description,
-    size,
+    sizes: rawSizes,
     name,
     price,
     // quantity,
@@ -182,10 +181,32 @@ const add = async (req, res, next) => {
     startDate,
     endDate
   } = req.body;
+
+  let sizes = [];
+  try {
+    if (Array.isArray(rawSizes)) {
+      // Khi nhiều size
+      sizes = rawSizes.map(item => ({
+        size: item.size,
+        quantity: parseInt(item.quantity)
+      })).filter(s => s.size && !isNaN(s.quantity));
+    } else if (rawSizes?.size && rawSizes?.quantity) {
+      // Khi chỉ có 1 size
+      sizes.push({
+        size: rawSizes.size,
+        quantity: parseInt(rawSizes.quantity)
+      });
+    }
+  } catch (err) {
+    msg = 'Dữ liệu kích cỡ không hợp lệ';
+    return res.render('product/add', { msg, type: findCategory });
+  }
+
+
   let missingFields = [];
   // Kiểm tra từng trường và thêm thông báo lỗi nếu trường nào đó trống
   if (!name) missingFields.push('tên sản phẩm');
-  if (!size) missingFields.push('kích cỡ');
+  if (!sizes) missingFields.push('kích cỡ');
   if (!categorysId) missingFields.push('thể loại');
   if (!description) missingFields.push('mô tả');
   if (!price) missingFields.push('giá bán');
@@ -216,13 +237,14 @@ const add = async (req, res, next) => {
 
   //==
   console.log(1);
+  console.log("🚀 ~ add ~ sizes:", sizes)
 
   try {
     const objProduct = new mProduct({
       name,
       categorysId,
       description,
-      size,
+      sizes,
       price,
       // discount,
       // quantity,
@@ -253,7 +275,6 @@ const edit = async (req, res, next) => {
     var product = await mProduct.findById(productid);
     msg = `Đang chỉnh sửa sản phẩm : ${product.name}`;
   } catch (error) {
-    console.log('🚀 ~ edit ~ error.message:', error.message);
     msg = `Lỗi : ${error.message}`;
     return res.render('product/edit', { msg, type: findCategory });
   }
@@ -273,7 +294,7 @@ const edit = async (req, res, next) => {
   const {
     categorysId,
     description,
-    size,
+    sizes: rawSizes,
     name,
     price,
     // quantity,
@@ -282,9 +303,30 @@ const edit = async (req, res, next) => {
     endDate
   } = req.body;
 
+  let sizes = [];
+  try {
+    if (Array.isArray(rawSizes)) {
+      // Khi nhiều size
+      sizes = rawSizes.map(item => ({
+        size: item.size,
+        quantity: parseInt(item.quantity)
+      })).filter(s => s.size && !isNaN(s.quantity));
+    } else if (rawSizes?.size && rawSizes?.quantity) {
+      // Khi chỉ có 1 size
+      sizes.push({
+        size: rawSizes.size,
+        quantity: parseInt(rawSizes.quantity)
+      });
+    }
+  } catch (err) {
+    msg = 'Dữ liệu kích cỡ không hợp lệ';
+    return res.render('product/add', { msg, type: findCategory });
+  }
+
+
   let missingFields = [];
   if (!name) missingFields.push('tên sản phẩm');
-  if (!size) missingFields.push('kích cỡ');
+  if (!sizes) missingFields.push('kích cỡ');
   if (!categorysId) missingFields.push('thể loại');
   if (!description) missingFields.push('mô tả');
   if (!price) missingFields.push('giá bán');
@@ -311,7 +353,7 @@ const edit = async (req, res, next) => {
     const msg = 'Ngày bắt đầu không được lớn hơn ngày kết thúc.';
     return res.render('product/add', { msg, type: findCategory });
   }
-  
+
   // console.log(discount);
   console.log(price);
 
@@ -322,7 +364,7 @@ const edit = async (req, res, next) => {
         name,
         categorysId,
         description,
-        size,
+        sizes,
         price,
         // discount,
         // quantity,
@@ -345,7 +387,6 @@ const edit = async (req, res, next) => {
     msg = 'Cập nhật sản phẩm thành công';
     product = updateProduct;
   } catch (error) {
-    console.log('🚀 ~ edit ~ error.message:', error.message);
     msg = `Lỗi: ${error.message}`;
   }
 
@@ -382,7 +423,7 @@ const del = async (req, res, next) => {
 
     if (deletedProduct) {
       await mCart.deleteMany({ productId: deletedProduct._id });
-    } 
+    }
     msg = 'xóa sản phẩm thành công';
   } catch (error) {
     console.error(error);
