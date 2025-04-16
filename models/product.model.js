@@ -11,11 +11,15 @@ const productSchema = new mongoose.Schema(
     image: [{ type: String }],
     description: { type: String },
     price: { type: Number, required: true },
-    discount: { type: Number, required: false , default: 0 },
-    quantity: { type: Number, required: true, default: 9999 },
+    discount: { type: Number, required: false, default: 0 },
     startDate: { type: Date, required: false },
     endDate: { type: Date, required: false },
-    size: { type: String, required: false },
+    sizes: [
+      {
+        size: { type: String, required: true },
+        quantity: { type: Number, required: true }
+      }
+    ]
 
   },
   { collection: 'products', timestamps: true }
