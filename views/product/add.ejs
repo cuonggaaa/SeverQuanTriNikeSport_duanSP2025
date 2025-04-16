@@ -22,10 +22,41 @@
                                     <input id="description" class="form-control" type="text" name="description"
                                         value="">
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="size" class="form-label">Kích cỡ</label>
-                                    <input id="size" class="form-control" type="text" name="size" value="">
+                                <div class="col-md-12">
+                                    <label class="form-label">Kích cỡ và số lượng</label>
+                                    <div id="size-list">
+                                        <div class="row g-2 size-item">
+                                            <div class="col-md-6">
+                                                <input class="form-control" type="text" name="sizes[0][size]" placeholder="Kích cỡ ">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" type="number" name="sizes[0][quantity]" placeholder="Số lượng">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary btn-sm mt-2" onclick="addSize()">+
+                                        Thêm kích cỡ</button>
                                 </div>
+
+                                <script>
+                                    function addSize() {
+                                        const sizeList = document.getElementById('size-list');
+                                        const index = sizeList.querySelectorAll('.size-item').length;
+                                        const newItem = document.createElement('div');
+                                        newItem.classList.add('row', 'g-2', 'size-item', 'mt-2');
+                                        newItem.innerHTML = `
+        <div class="col-md-6">
+            <input class="form-control" type="text" name="sizes[${index}][size]" placeholder="Kích cỡ ">
+        </div>
+        <div class="col-md-6">
+            <input class="form-control" type="number" name="sizes[${index}][quantity]" placeholder="Số lượng">
+        </div>
+    `;
+                                        sizeList.appendChild(newItem);
+                                    }
+
+                                </script>
+
                                 <div class="col-md-6">
                                     <label for="price" class="form-label">Giá sản phẩm</label>
                                     <input id="price" class="form-control" type="number" name="price" value="">
