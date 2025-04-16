@@ -12,6 +12,7 @@ const cartSchema = new mongoose.Schema(
       ref: 'productModel',
       required: true
     },
+    size: { type: String, required: true },
     quantity: { type: Number, required: true }
   },
   { collection: 'carts', timestamps: true }
