@@ -14,8 +14,17 @@
                         </h5>
                         <p class="card-text">Mô tả: <%= product.description %>
                         </p>
-                        <p class="card-text">Kích cỡ: <%= product.size || 'không có' %>
-                        </p>
+                        <td>Kích cỡ
+                            <% if (product.sizes && product.sizes.length > 0) { %>
+                                <ul>
+                                    <% product.sizes.forEach(s => { %>
+                                        <li><%= s.size %> - <%= s.quantity %> số lượng</li>
+                                    <% }) %>
+                                </ul>
+                            <% } else { %>
+                                <%= 'Không có kích cỡ' %>
+                            <% } %>
+                        </td>
                         <p class="card-text">Giá sản phẩm: <%= product.price %>
                         </p>
                         <!-- <p class="card-text">Giảm giá: <%= product.discount %>
