@@ -16,74 +16,93 @@
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label for="name" class="form-label">Tên sản phẩm</label>
-                                    <input id="name" class="form-control" type="text" name="name"
-                                        value="<%= product ? product.name : '' %>">
+                                    <input id="name" class="form-control" type="text" name="name" value="<%= product ? product.name : '' %>">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="description" class="form-label">Mô tả</label>
-                                    <input id="description" class="form-control" type="text" name="description"
-                                        value="<%= product ? product.description : '' %>">
+                                    <input id="description" class="form-control" type="text" name="description" value="<%= product ? product.description : '' %>">
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="size" class="form-label">Kích cỡ</label>
-                                    <input id="size" class="form-control" type="text" name="size"
-                                        value="<%= product.size ? product.size : '' %>">
+                        
+                                <!-- 🔽 Danh sách kích cỡ và số lượng -->
+                                <div class="col-12">
+                                    <label class="form-label">Kích cỡ & Số lượng</label>
+                                    <div id="size-list">
+                                        <% if (product && product.sizes && product.sizes.length > 0) { %>
+                                            <% product.sizes.forEach((s, idx) => { %>
+                                                <div class="row g-2 size-item mt-2">
+                                                    <div class="col-md-6">
+                                                        <input class="form-control" type="text" name="sizes[<%= idx %>][size]" value="<%= s.size %>" placeholder="Kích cỡ">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input class="form-control" type="number" name="sizes[<%= idx %>][quantity]" value="<%= s.quantity %>" placeholder="Số lượng">
+                                                    </div>
+                                                </div>
+                                            <% }) %>
+                                        <% } else { %>
+                                            <div class="row g-2 size-item mt-2">
+                                                <div class="col-md-6">
+                                                    <input class="form-control" type="text" name="sizes[0][size]" placeholder="Kích cỡ">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input class="form-control" type="number" name="sizes[0][quantity]" placeholder="Số lượng">
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-primary mt-2" onclick="addSize()">+ Thêm kích cỡ</button>
                                 </div>
+                        
                                 <div class="col-md-6">
                                     <label for="price" class="form-label">Giá sản phẩm</label>
-                                    <input id="price" class="form-control" type="number" name="price"
-                                        value="<%= product ? product.price : '' %>">
+                                    <input id="price" class="form-control" type="number" name="price" value="<%= product ? product.price : '' %>">
                                 </div>
-                                <!-- <div class="col-md-6">
-                                    <label for="discount" class="form-label">Giảm giá</label>
-                                    <input id="discount" class="form-control" type="number" name="discount"
-                                        value="<%= product ? product.discount : '' %>">
-                                </div> -->
-                                <!-- <div class="col-md-6">
-                                    <label for="startDate" class="form-label">Ngày bắt đầu</label>
-                                    <input id="startDate" class="form-control" type="date" name="startDate" value="<%= product && product.startDate ? new Date(product.startDate).toISOString().split('T')[0] : '' %>">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="endDate" class="form-label">Ngày kết thúc</label>
-                                    <input id="endDate" class="form-control" type="date" name="endDate" value="<%= product && product.endDate ? new Date(product.endDate).toISOString().split('T')[0] : '' %>">
-                                </div>-->
-                                
+                        
                                 <div class="col-md-6">
                                     <label for="image" class="form-label">Ảnh sản phẩm</label>
-                                    <input id="image" class="form-control" type="file" name="image" accept="image/*"
-                                        multiple>
+                                    <input id="image" class="form-control" type="file" name="image" accept="image/*" multiple>
                                     <div id="image-preview" style="margin-top: 10px;">
-                                        <img id="preview" src="" alt="Image Preview"
-                                            style="max-width: 30%; display: none;">
+                                        <img id="preview" src="" alt="Image Preview" style="max-width: 30%; display: none;">
                                     </div>
                                 </div>
-
-
+                        
                                 <label for="categorysId" class="form-label">Thể loại</label>
-                                <% if (type.length> 0) { %>
+                                <% if (type.length > 0) { %>
                                     <select class="form-control" name="categorysId" aria-label="Default select example">
-                                        <% type.forEach( (row)=>{
+                                        <% type.forEach((row) => {
                                             let selected = '';
-                                            if(String( row._id ) == String(product.categorysId) ){
-                                            selected = ' selected ';
+                                            if (String(row._id) == String(product.categorysId)) {
+                                                selected = ' selected ';
                                             }
-                                            %>
-                                            <option <%=selected %>
-                                                value="<%= row._id %>"> <%= row.name %>
-                                            </option>
-                                            <% } ) %>
+                                        %>
+                                            <option <%= selected %> value="<%= row._id %>"><%= row.name %></option>
+                                        <% }) %>
                                     </select>
-                                    <% } %>
-                                         <!-- <div class="col-md-6">
-                                            <label for="quantity" class="form-label">Số lượng</label>
-                                            <input id="quantity" class="form-control" type="number" name="quantity"
-                                                value="<%= product ? product.quantity : '' %>">
-                                        </div> -->
+                                <% } %>
                             </div>
+                        
                             <div class="d-grid gap-2 mt-4">
                                 <button class="btn btn-primary" type="submit">Cập Nhật Thông Tin</button>
                             </div>
                         </form>
+                        
+                        <script>
+                            function addSize() {
+                                const sizeList = document.getElementById('size-list');
+                                const index = sizeList.querySelectorAll('.size-item').length;
+                                const newItem = document.createElement('div');
+                                newItem.classList.add('row', 'g-2', 'size-item', 'mt-2');
+                                newItem.innerHTML = `
+                                    <div class="col-md-6">
+                                        <input class="form-control" type="text" name="sizes[${index}][size]" placeholder="Kích cỡ">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input class="form-control" type="number" name="sizes[${index}][quantity]" placeholder="Số lượng">
+                                    </div>
+                                `;
+                                sizeList.appendChild(newItem);
+                            }
+                        </script>
+                        
                     </div>
                 </div>
     </div>
