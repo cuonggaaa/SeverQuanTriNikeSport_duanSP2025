@@ -381,7 +381,7 @@ const vnpayReturn = async (req, res, next) => {
         }
 
         const findProduct = await mdProduct.findById(finCart.productId);
-        if (!findProduct) {
+        if (!findProduct || findProduct.status === 0) {
           return responseHandler(res, 400, 'Không tìm thấy sản phẩm');
         }
 
