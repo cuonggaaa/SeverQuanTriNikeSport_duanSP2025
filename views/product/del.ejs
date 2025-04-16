@@ -5,7 +5,7 @@
             <div class="col-md-6">
                 <div class="card shadow">
                     <div class="card-body">
-                        <h2 class="card-title text-center mb-4">Xác Nhận Xóa Sản Phẩm</h2>
+                        <h2 class="card-title text-center mb-4">Xác Nhận</h2>
 
                         <% if(msg && msg.length> 0) { %>
                             <div class="alert alert-<%= status == 1 ? 'info' : 'danger' %> alert-dismissible fade show"
@@ -19,12 +19,17 @@
                                 <form action="" method="post">
                                     <div class="alert alert-warning" role="alert">
                                         <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                                        Bạn có chắc chắn muốn xóa sản phẩm này?
+                                        <% if (productStatus===1) { %>
+                                            Bạn có chắc chắn muốn hiện sản phẩm này?
+                                            <% } else if (productStatus===0) { %>
+                                                Bạn có chắc chắn muốn ẩn sản phẩm này?
+                                                <% } %>
+
                                     </div>
 
                                     <div class="d-grid gap-2">
-                                        <button class="btn btn-danger" type="submit">
-                                            <i class="bi bi-trash-fill me-2"></i>Xác nhận xóa
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="bi bi-trash-fill me-2"></i>Xác nhận
                                         </button>
                                         <a href="/product" class="btn btn-secondary">
                                             <i class="bi bi-arrow-left me-2"></i>Quay lại
