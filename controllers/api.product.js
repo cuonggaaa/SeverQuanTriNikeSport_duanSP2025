@@ -17,7 +17,9 @@ const getAll = async (req, res, next) => {
     const skip = (page - 1) * limit;
 
     const { name, priceMin, priceMax, sort, order, category } = req.query;
-    const searchQuery = {};
+    const searchQuery = {
+      status: 1,
+    };
 
     if (name) {
       searchQuery.name = new RegExp(name, 'i');
@@ -103,7 +105,7 @@ const getById = async (req, res, next) => {
     }
 
     const product = await mProduct.findById(productId).populate('categorysId');
-    if (!product) {
+    if (!product || product.status === 0) {
       return responseHandler(res, 404, 'sản phẩm không tồn tại');
     }
 
@@ -399,6 +401,7 @@ const edit = async (req, res, next) => {
 const del = async (req, res, next) => {
   const product = req.params.id;
   let msg = '';
+  let productStatus = 0;
 
   try {
     var dataProduct = await mProduct.findById(product);
@@ -408,29 +411,41 @@ const del = async (req, res, next) => {
       msg = `Không tìm thấy sản phẩm`;
       return res.render('product/del', { msg, status: 0 });
     }
-    msg = `${dataProduct.name} sản phẩm đang được chọn để xóa`;
+    if (dataProduct.status === 1) {
+      productStatus = 0;
+      msg = `${dataProduct.name} sản phẩm đang được chọn để ẩn`;
+    } else {
+      productStatus = 1;
+      msg = `${dataProduct.name} sản phẩm đang được chọn để hiện`;
+    }
   } catch (error) {
     msg = `Lỗi : ${error.message}`;
-    return res.render('product/del', { msg, status: 0 });
+    return res.render('product/del', { msg, status: 0, productStatus });
   }
 
   if (req.method !== 'POST') {
-    return res.render('product/del', { msg, status: 0 });
+    return res.render('product/del', { msg, status: 0, productStatus });
   }
 
   try {
-    const deletedProduct = await mProduct.findByIdAndDelete(product);
+    const updateProduct = await mProduct.findByIdAndUpdate(
+      product,
+      {
+        status: productStatus
+      },
+      { new: true }
+    );
 
-    if (deletedProduct) {
-      await mCart.deleteMany({ productId: deletedProduct._id });
+    if (updateProduct && productStatus === 0) {
+      await mCart.deleteMany({ productId: updateProduct._id });
     }
-    msg = 'xóa sản phẩm thành công';
+    msg = 'thao tác thành công';
   } catch (error) {
     console.error(error);
     msg = `Lỗi : ${error.message}`;
   }
 
-  res.render('product/del', { msg, status: 1 });
+  res.render('product/del', { msg, status: 1, productStatus });
 };
 const detail = async (req, res, next) => {
   const productId = req.params.id;

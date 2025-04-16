@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema(
     description: { type: String },
     price: { type: Number, required: true },
     discount: { type: Number, required: false, default: 0 },
+    status: { type: Number, required: true, default: 1 },
     startDate: { type: Date, required: false },
     endDate: { type: Date, required: false },
     sizes: [
