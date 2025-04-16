@@ -15,15 +15,17 @@
                         <p class="card-text">Mô tả: <%= product.description %>
                         </p>
                         <td>Kích cỡ
-                            <% if (product.sizes && product.sizes.length > 0) { %>
+                            <% if (product.sizes && product.sizes.length> 0) { %>
                                 <ul>
-                                    <% product.sizes.forEach(s => { %>
-                                        <li><%= s.size %> - <%= s.quantity %> số lượng</li>
-                                    <% }) %>
+                                    <% product.sizes.forEach(s=> { %>
+                                        <li>
+                                            <%= s.size %> - <%= s.quantity %> số lượng
+                                        </li>
+                                        <% }) %>
                                 </ul>
-                            <% } else { %>
-                                <%= 'Không có kích cỡ' %>
-                            <% } %>
+                                <% } else { %>
+                                    <%= 'Không có kích cỡ' %>
+                                        <% } %>
                         </td>
                         <p class="card-text">Giá sản phẩm: <%= product.price %>
                         </p>
@@ -52,7 +54,11 @@
                         <!-- <p class="card-text">Số lượng: <%= product.quantity %>
                         </p> -->
                         <a href="/product/edit/<%= product._id %>" class="btn btn-primary">Chỉnh sửa</a>
-                        <a href="/product/del/<%= product._id %>" class="btn btn-danger">Xóa</a>
+                        <a href="/product/del/<%= product._id %>"
+                            class="btn <%= product.status === 1 ? 'btn-danger' : 'btn-warning' %>">
+                            <%= product.status===1 ? 'Ẩn' : 'Hiện' %>
+                        </a>
+
                     </div>
                 </div>
                 <% } else { %>
