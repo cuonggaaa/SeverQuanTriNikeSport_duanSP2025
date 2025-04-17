@@ -60,7 +60,8 @@ cron.schedule('* * * * *', async () => {
 
 const getAll = async (req, res, next) => {
   try {
-    const list = await mVoucher.find({}).sort({ status: 1 });
+
+    const list = await mVoucher.find({ statusVoucher: 1 }).sort({ status: 1 });
 
     if (list.length > 0) {
       return responseHandler(res, 200, 'tìm thành công', list);

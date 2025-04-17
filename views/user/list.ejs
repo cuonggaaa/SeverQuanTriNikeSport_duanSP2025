@@ -35,7 +35,7 @@
                                         <th>Số điện  thoại</th>
                                         <th>Email</th>
                                         <th>Ngày tạo tài khoản</th>
-                                        <th>Thao tác</th>
+                                        <!-- <th>Thao tác</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -71,13 +71,13 @@
                                                         <%= item.createdAt ? formatDate(item.createdAt)
                                                             : 'NaN' %>
                                                 </td>
-                                                <td>
+                                                <!-- <td>
                                                     <div class="btn-group" role="group">
 
                                                         <a href="/user/del/<%= item._id %>"
                                                             class="btn btn-outline-danger btn-sm">Xóa</a>
                                                     </div>
-                                                </td>
+                                                </td> -->
                                             </tr>
                                             <% }); %>
                                                 <% } else { %>

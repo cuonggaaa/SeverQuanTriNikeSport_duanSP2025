@@ -13,7 +13,9 @@ const getAll = async (req, res, next) => {
     const skip = (page - 1) * limit;
 
     const { name } = req.query;
-    const searchQuery = {};
+    const searchQuery = {
+      status: 1,
+    };
 
     if (name) {
       searchQuery.name = new RegExp(name, 'i');
