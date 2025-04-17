@@ -14,7 +14,7 @@ const getByField = async (req, res, next, field) => {
 
     // Tìm kiếm theo field (productId hoặc userId)
     const data = await mProductReview
-      .find({ [field]: id })
+      .find({ [field]: id, status: 1 })
       .populate('userId')
       .populate('productId')
       // .populate({
@@ -133,7 +133,7 @@ const list = async (req, res, next) => {
 const del = async (req, res, next) => {
   const id = req.params.id;
   let msg = '';
-
+  let rvStatus = 0;
   try {
     var datafind = await mProductReview.findById(id);
 
@@ -141,25 +141,37 @@ const del = async (req, res, next) => {
       msg = `Không tìm thấy`;
       return res.render('review/del', { msg, status: 0 });
     }
-    msg = `đánh giá :${datafind._id} đang được chọn để xóa`;
+    if (datafind.status === 1) {
+      rvStatus = 0;
+      msg = `đánh giá đang được chọn để ẩn`;
+    } else {
+      rvStatus = 1;
+      msg = `đánh giá đang được chọn để hiện`;
+    }
   } catch (error) {
     msg = `Lỗi : ${error.message}`;
-    return res.render('review/del', { msg, status: 0 });
+    return res.render('review/del', { msg, status: 0, rvStatus });
   }
 
   if (req.method !== 'POST') {
-    return res.render('review/del', { msg, status: 0 });
+    return res.render('review/del', { msg, status: 0, rvStatus });
   }
 
   try {
-    await mProductReview.findByIdAndDelete(id);
-    msg = 'xóa thành công';
+    await mProductReview.findByIdAndUpdate(
+      id,
+      {
+        status: rvStatus
+      },
+      { new: true }
+    );
+    msg = 'thao tác thành công';
   } catch (error) {
     console.error(error);
     msg = `Lỗi : ${error.message}`;
   }
 
-  res.render('review/del', { msg, status: 1 });
+  res.render('review/del', { msg, status: 1, rvStatus });
 };
 module.exports = {
   getByField,

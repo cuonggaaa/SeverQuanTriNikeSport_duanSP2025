@@ -34,15 +34,17 @@
                                                         <img src="<%= item.image %>" alt="Image"
                                                             style="width: 100px; height: 100px; object-fit: cover;">
                                                         <% } else { %>
-                                                            N/A
+                                                            Không có ảnh
                                                             <% } %>
                                                 </td>
                                                 <td>
                                                     <div class="btn-group" role="group">
                                                         <a href="/category/edit/<%= item._id %>"
                                                             class="btn btn-outline-primary btn-sm">Sửa</a>
-                                                        <a href="/category/del/<%= item._id %>"
-                                                            class="btn btn-outline-danger btn-sm">Xóa</a>
+                                                            <a href="/category/del/<%= item._id %>"
+                                                                class="btn <%= item.status === 1 ? 'btn-outline-danger' : 'btn-outline-warning' %>">
+                                                                <%= item.status===1 ? 'Ẩn' : 'Hiện' %>
+                                                            </a>
 
                                                     </div>
                                                 </td>

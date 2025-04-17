@@ -14,6 +14,7 @@ const productReviewSchema = new mongoose.Schema(
       required: true
     },
     rating: { type: Number, required: true },
+    status: { type: Number, required: true, default: 1 },
     reviewText: { type: String, required: true }
   },
   { collection: 'product_reviews', timestamps: true }

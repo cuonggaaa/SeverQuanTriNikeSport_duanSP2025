@@ -60,7 +60,8 @@ cron.schedule('* * * * *', async () => {
 
 const getAll = async (req, res, next) => {
   try {
-    const list = await mVoucher.find({}).sort({ status: 1 });
+
+    const list = await mVoucher.find({ statusVoucher: 1 }).sort({ status: 1 });
 
     if (list.length > 0) {
       return responseHandler(res, 200, 'tìm thành công', list);
@@ -201,33 +202,48 @@ const edit = async (req, res, next) => {
 const del = async (req, res, next) => {
   const id = req.params.id;
   let msg = '';
+  let voucherStatus = 0;
 
   try {
     var dataVoucher = await mVoucher.findById(id);
 
     if (!dataVoucher) {
       msg = `Không tìm thấy`;
-      return res.render('voucher/del', { msg, status: 0 });
+      return res.render('voucher/del', { msg, status: 0, voucherStatus });
     }
-    msg = `code voucher :${dataVoucher.code} đang được chọn để xóa`;
+    if (dataVoucher.statusVoucher === 1) {
+      voucherStatus = 0;
+      msg = `voucher ${dataVoucher.code} đang được chọn để ẩn`;
+    } else {
+      voucherStatus = 1;
+      msg = `voucher ${dataVoucher.code} đang được chọn để hiện`;
+    }
   } catch (error) {
     msg = `Lỗi : ${error.message}`;
-    return res.render('voucher/del', { msg, status: 0 });
+    return res.render('voucher/del', { msg, status: 0, voucherStatus });
   }
 
   if (req.method !== 'POST') {
-    return res.render('voucher/del', { msg, status: 0 });
+    return res.render('voucher/del', { msg, status: 0, voucherStatus });
   }
 
   try {
-    await mVoucher.findByIdAndDelete(id);
-    msg = 'xóa thành công';
+    await mVoucher.findByIdAndUpdate(
+      id,
+      {
+        statusVoucher: voucherStatus
+      },
+      { new: true }
+    );
+
+
+    msg = 'thao tác thành công';
   } catch (error) {
     console.error(error);
     msg = `Lỗi : ${error.message}`;
   }
 
-  res.render('voucher/del', { msg, status: 1 });
+  res.render('voucher/del', { msg, status: 1, voucherStatus });
 };
 
 

@@ -153,7 +153,7 @@ const list = async (req, res, next) => {
 };
 const add = async (req, res, next) => {
   let msg = '';
-  const findCategory = await mCategory.find();
+  const findCategory = await mCategory.find({ status: 1 });
   console.log(1);
 
   if (req.method !== 'POST') {
@@ -271,7 +271,7 @@ const edit = async (req, res, next) => {
   const productid = req.params.id;
   let msg = '';
 
-  const findCategory = await mCategory.find();
+  const findCategory = await mCategory.find({ status: 1 });
 
   try {
     var product = await mProduct.findById(productid);

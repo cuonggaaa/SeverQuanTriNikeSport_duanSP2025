@@ -39,10 +39,14 @@
                                                     <%= item.description || 'N/A' %>
                                                 </td>
                                                 <td>
-                                                    <%= item.startDate ? new Date(item.startDate).toLocaleDateString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit' }) : '' %>
+                                                    <%= item.startDate ? new
+                                                        Date(item.startDate).toLocaleDateString('vi-VN', {
+                                                        year: 'numeric' , month: '2-digit' , day: '2-digit' }) : '' %>
                                                 </td>
                                                 <td>
-                                                    <%= item.endDate ? new Date(item.endDate).toLocaleDateString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit' }) : '' %>
+                                                    <%= item.endDate ? new
+                                                        Date(item.endDate).toLocaleDateString('vi-VN', { year: 'numeric'
+                                                        , month: '2-digit' , day: '2-digit' }) : '' %>
                                                 </td>
                                                 <td>
                                                     <%= item.discountValue || 'N/A' %>
@@ -65,8 +69,11 @@
                                                     <div class="btn-group" role="group">
                                                         <a href="/voucher/edit/<%= item._id %>"
                                                             class="btn btn-outline-primary btn-sm">Sửa</a>
+
                                                         <a href="/voucher/del/<%= item._id %>"
-                                                            class="btn btn-outline-danger btn-sm">Xóa</a>
+                                                            class="btn <%= item.statusVoucher === 1 ? 'btn-outline-danger' : 'btn-outline-warning' %>">
+                                                            <%= item.statusVoucher === 1 ? 'Ẩn' : 'Hiện' %>
+                                                        </a>
 
                                                     </div>
                                                 </td>

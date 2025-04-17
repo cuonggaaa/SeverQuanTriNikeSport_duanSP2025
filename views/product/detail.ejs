@@ -48,15 +48,15 @@
                         </td>
 
                         <p class="card-text">Thể loại: <%= product.categorysId ? product.categorysId.name
-                                : 'Thể loại đã bị xóa, hãy cật nhật' %>
+                                : 'Thể loại đã bị ẩn, hãy cật nhật' %>
 
                         </p>
                         <!-- <p class="card-text">Số lượng: <%= product.quantity %>
                         </p> -->
                         <a href="/product/edit/<%= product._id %>" class="btn btn-primary">Chỉnh sửa</a>
                         <a href="/product/del/<%= product._id %>"
-                            class="btn <%= product.status === 1 ? 'btn-danger' : 'btn-warning' %>">
-                            <%= product.status===1 ? 'Ẩn' : 'Hiện' %>
+                            class="btn <%= product.status == 1 ? 'btn-danger' : 'btn-warning' %>">
+                            <%= product.status==1 ? 'Ẩn' : 'Hiện' %>
                         </a>
 
                     </div>

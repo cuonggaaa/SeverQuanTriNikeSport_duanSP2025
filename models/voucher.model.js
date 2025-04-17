@@ -7,6 +7,7 @@ const voucherSchema = new mongoose.Schema(
     startDate: { type: Date, required: false },
     endDate: { type: Date, required: false },
     usageLimit: { type: Number, required: false },
+    statusVoucher: { type: Number, required: true, default: 1 },
     image: { type: String, required: true },
     status: {
       type: String,

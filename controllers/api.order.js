@@ -110,7 +110,7 @@ const createPaymentUrl = async (req, res, next) => {
 
       const finVoucher = await mdVoucher.findById(voucherId);
       if (finVoucher) {
-        if (finVoucher.status !== 'Active' || finVoucher.usageLimit <= 0) {
+        if (finVoucher.status !== 'Active' || finVoucher.usageLimit <= 0 || finVoucher.statusVoucher === 0) {
           return responseHandler(res, 400, 'voucher đã hết hạn hoặc số lượng đã được dùng hết');
         }
       }
@@ -311,6 +311,12 @@ const vnpayReturn = async (req, res, next) => {
         // } else {
         // }
       }
+
+      const finMVouCher = await mdVoucher.findById(voucher);
+      if (finMVouCher.statusVoucher === 0) {
+        return responseHandler(res, 400, 'voucher không tồn tại hoặc đã bị vô hiệu hóa');
+      }
+
       console.log(1);
 
       if (voucher && voucher.trim() !== "") {
@@ -451,6 +457,11 @@ const codReturn = async (req, res, next) => {
       // } else {
       // }
     }
+    const finMVouCher = await mdVoucher.findById(voucher);
+    if (finMVouCher.statusVoucher === 0) {
+      return responseHandler(res, 400, 'voucher không tồn tại hoặc đã bị vô hiệu hóa');
+    }
+
     if (voucher && voucher.trim() !== "") {
       await mdVoucher.updateOne({ _id: voucher }, { $inc: { usageLimit: -1 } });
     }
