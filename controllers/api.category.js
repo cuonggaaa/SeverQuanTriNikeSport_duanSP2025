@@ -1,7 +1,7 @@
 var Category = require('../models/category.model');
 const { responseHandler } = require('../utils/responseHandler');
 const mongoose = require('mongoose');
-
+const mProduct = require('../models/product.model');
 const getAll = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -171,6 +171,7 @@ const edit = async (req, res, next) => {
 const del = async (req, res, next) => {
   const categoryId = req.params.id;
   let msg = '';
+  let categoryStatus = 0;
 
   try {
     var dataProduct = await Category.findById(categoryId);
@@ -179,25 +180,50 @@ const del = async (req, res, next) => {
       msg = `Không tìm thấy thể loại`;
       return res.render('category/del', { msg, status: 0 });
     }
-    msg = `${dataProduct.name} thể loại đang được chọn để xóa`;
+    if (dataProduct.status === 1) {
+      categoryStatus = 0;
+      msg = `thể loại ${dataProduct.name} đang được chọn để ẩn`;
+    } else {
+      categoryStatus = 1;
+      msg = `thể loại ${dataProduct.name} đang được chọn để hiện`;
+    }
   } catch (error) {
     msg = `Lỗi : ${error.message}`;
-    return res.render('category/del', { msg, status: 0 });
+    return res.render('category/del', { msg, status: 0, categoryStatus });
   }
 
   if (req.method !== 'POST') {
-    return res.render('category/del', { msg, status: 0 });
+    return res.render('category/del', { msg, status: 0, categoryStatus });
   }
 
   try {
-    await Category.findByIdAndDelete(categoryId);
-    msg = 'xóa thể loại thành công';
+    const hideCategory = await Category.findByIdAndUpdate(
+      categoryId,
+      {
+        status: categoryStatus
+      },
+      { new: true }
+    );
+
+    if (hideCategory && categoryStatus === 0) {
+      await mProduct.updateMany(
+        { categorysId: hideCategory._id },
+        { $set: { categorysId: null } }
+      );
+    }
+    // if (hideCategory && categoryStatus === 1) {
+    //   await mProduct.updateMany(
+    //     { categorysId: hideCategory._id },
+    //     { $set: { status: 1 } }
+    //   );
+    // }
+    msg = 'thao tác thành công';
   } catch (error) {
     console.error(error);
     msg = `Lỗi : ${error.message}`;
   }
 
-  res.render('category/del', { msg, status: 1 });
+  res.render('category/del', { msg, status: 1, categoryStatus });
 };
 
 
