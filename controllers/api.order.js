@@ -351,6 +351,7 @@ const vnpayReturn = async (req, res, next) => {
               sizes: finCart.productId.sizes
             },
             quantity: finCart.quantity,
+            size: finCart.size,
             __v: finCart.__v
           };
         } catch (error) {
