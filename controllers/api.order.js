@@ -313,14 +313,11 @@ const vnpayReturn = async (req, res, next) => {
         // }
       }
 
-      const finMVouCher = await mdVoucher.findById(voucher);
-      if (finMVouCher.statusVoucher === 0) {
-        return responseHandler(res, 400, 'voucher không tồn tại hoặc đã bị vô hiệu hóa');
-      }
-
-      console.log(1);
-
       if (voucher && voucher.trim() !== "") {
+        const finMVouCher = await mdVoucher.findById(voucher);
+        if (finMVouCher.statusVoucher === 0) {
+          return responseHandler(res, 400, 'voucher không tồn tại hoặc đã bị vô hiệu hóa');
+        }
         await mdVoucher.updateOne({ _id: voucher }, { $inc: { usageLimit: -1 } });
       }
       // Construct the cart data
@@ -461,12 +458,13 @@ const codReturn = async (req, res, next) => {
       // } else {
       // }
     }
-    const finMVouCher = await mdVoucher.findById(voucher);
-    if (finMVouCher.statusVoucher === 0) {
-      return responseHandler(res, 400, 'voucher không tồn tại hoặc đã bị vô hiệu hóa');
-    }
+
 
     if (voucher && voucher.trim() !== "") {
+      const finMVouCher = await mdVoucher.findById(voucher);
+      if (finMVouCher.statusVoucher === 0) {
+        return responseHandler(res, 400, 'voucher không tồn tại hoặc đã bị vô hiệu hóa');
+      }
       await mdVoucher.updateOne({ _id: voucher }, { $inc: { usageLimit: -1 } });
     }
     // Construct the cart data
