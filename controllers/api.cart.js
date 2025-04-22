@@ -3,6 +3,7 @@ var mCategory = require('../models/category.model');
 var mCart = require('../models/cart.model');
 const mongoose = require('mongoose');
 const { responseHandler } = require('../utils/responseHandler');
+const { createNoti } = require('./api.noti');
 
 var objReturn = {
   status: 1,
@@ -141,6 +142,7 @@ const addCart = async (req, res, next) => {
     });
 
     const savedCart = await newCart.save();
+    await createNoti(userId, `Đã thêm sản phẩm ${product.name} vào giỏ hàng`);
     return responseHandler(res, 200, 'đã thêm sản phẩm vào giỏ hàng', savedCart);
   } catch (error) {
     return responseHandler(res, 500, 'lỗi', null, error.message);

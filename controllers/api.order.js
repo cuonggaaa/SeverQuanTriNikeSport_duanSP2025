@@ -10,6 +10,7 @@ let mdCart = require('../models/cart.model');
 let mdUser = require('../models/user.model');
 let mdVoucher = require('../models/voucher.model');
 const { responseHandler } = require('../utils/responseHandler');
+const { createNoti } = require('./api.noti');
 
 
 // Function to sort an object by its keys
@@ -312,14 +313,11 @@ const vnpayReturn = async (req, res, next) => {
         // }
       }
 
-      const finMVouCher = await mdVoucher.findById(voucher);
-      if (finMVouCher.statusVoucher === 0) {
-        return responseHandler(res, 400, 'voucher không tồn tại hoặc đã bị vô hiệu hóa');
-      }
-
-      console.log(1);
-
       if (voucher && voucher.trim() !== "") {
+        const finMVouCher = await mdVoucher.findById(voucher);
+        if (finMVouCher.statusVoucher === 0) {
+          return responseHandler(res, 400, 'voucher không tồn tại hoặc đã bị vô hiệu hóa');
+        }
         await mdVoucher.updateOne({ _id: voucher }, { $inc: { usageLimit: -1 } });
       }
       // Construct the cart data
@@ -415,6 +413,9 @@ const vnpayReturn = async (req, res, next) => {
           );
 
           await mdCart.findByIdAndDelete(iterator);
+
+          await createNoti(userID, `Đã thanh toán sản phẩm ${findProduct.name} thành công`);
+
         } catch (error) {
           return responseHandler(res, 500, 'Lỗi khi cập nhật sản phẩm', null, error.message);
         }
@@ -457,12 +458,13 @@ const codReturn = async (req, res, next) => {
       // } else {
       // }
     }
-    const finMVouCher = await mdVoucher.findById(voucher);
-    if (finMVouCher.statusVoucher === 0) {
-      return responseHandler(res, 400, 'voucher không tồn tại hoặc đã bị vô hiệu hóa');
-    }
+
 
     if (voucher && voucher.trim() !== "") {
+      const finMVouCher = await mdVoucher.findById(voucher);
+      if (finMVouCher.statusVoucher === 0) {
+        return responseHandler(res, 400, 'voucher không tồn tại hoặc đã bị vô hiệu hóa');
+      }
       await mdVoucher.updateOne({ _id: voucher }, { $inc: { usageLimit: -1 } });
     }
     // Construct the cart data
@@ -562,6 +564,10 @@ const codReturn = async (req, res, next) => {
       );
 
       await mdCart.findByIdAndDelete(iterator);
+
+      await createNoti(userID, `Đã đặt sản phẩm ${findProduct.name} thành công`);
+
+
     }
 
     return responseHandler(res, 200, 'đặt hàng cod thành công', newORDER);
@@ -714,8 +720,38 @@ const handlePostRequest = async (req, res) => {
   }
 
   try {
-    await mdOrder.findByIdAndUpdate(billId, { status });
+    console.log('348y78gqrcgervqprvh');
+    const order = await mdOrder.findByIdAndUpdate(billId, { status });
     console.log(`Updated bill ${billId} with status ${status}`);
+
+    let status_en;
+
+    switch (status) {
+      case 'Pending':
+        status_en = 'Chờ xử lý';
+        break;
+      case 'Processing':
+        status_en = 'Đang xử lý';
+        break;
+      case 'Shipped':
+        status_en = 'Đã gửi';
+        break;
+      case 'Cancelled':
+        status_en = 'Đã hủy';
+        break;
+      case 'Returned':
+        status_en = 'Đã trả lại';
+        break;
+      case 'Delivered':
+        status_en = 'Đã giao hàng';
+        break;
+      default:
+        status_en = 'Không xác định';
+    }
+
+
+    await createNoti(order.userId, `Mã đơn hàng ${order._id} trị giá ${order.totalAmount} : ${status_en}`);
+
     res.redirect('back');
   } catch (error) {
     console.error('Error updating bill status:', error);
