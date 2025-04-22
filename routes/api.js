@@ -12,6 +12,7 @@ const apiPayMethodRoute = require('./api.payMethod');
 const apiVoucherRoute = require('./api.voucher');
 const apiCartRoute = require('./api.cart');
 const apiOrderRoute = require('./api.order');
+const apiNotiRoute = require('./api.noti');
 
 // const apiGradesRoute = require('./api.grades');
 // const apiTuitionPaymentRoute = require('./api.tuitionPayment');
@@ -27,6 +28,7 @@ router.use('/pay-method', apiPayMethodRoute);
 router.use('/voucher', apiVoucherRoute);
 router.use('/cart', apiCartRoute);
 router.use('/order', apiOrderRoute);
+router.use('/noti', apiNotiRoute);
 
 // router.use('/grades', apiGradesRoute);
 // router.use('/tuition', apiTuitionPaymentRoute);
